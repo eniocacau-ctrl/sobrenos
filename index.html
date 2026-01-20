@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nós — Padel Lobby</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #c8102e;
+            color: #fff;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            letter-spacing: 1px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .intro {
+            font-size: 1.25rem;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #555;
+        }
+
+        .highlight {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        .section-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        section {
+            background: #fff;
+            padding: 30px 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        section h2 {
+            color: #c8102e;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #fbbf24;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        section p,
+        section ul {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        ul {
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: #222;
+            color: #ddd;
+            font-size: 0.95rem;
+        }
+
+        /* Responsivo para tablets e celulares */
+        @media (max-width: 900px) {
+            .section-container {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2.2rem;
+            }
+
+            .intro {
+                font-size: 1.1rem;
+            }
+
+            section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Sobre o Padel Lobby</h1>
+    </header>
+
+    <main>
+        <p class="intro">
+            O <span class="highlight">Padel Lobby</span> é um espaço dedicado à prática e ao desenvolvimento do padel.
+            Nosso objetivo é proporcionar um ambiente moderno, confortável e acolhedor para atletas e entusiastas do
+            esporte.
+        </p>
+
+        <div class="section-container">
+            <section>
+                <h2>Nossa Missão</h2>
+                <p>
+                    Promover o padel como uma prática esportiva acessível e prazerosa, incentivando a socialização, a
+                    saúde e o bem-estar de todos os frequentadores.
+                </p>
+            </section>
+
+            <section>
+                <h2>Serviços</h2>
+                <ul>
+                    <li>Quadras cobertas e de alta qualidade.</li>
+                    <li>Estrutura completa com vestiários, bar e áreas de convivência.</li>
+                    <li>Serviços complementares como Wi-Fi e espaço para eventos.</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        © 2026 Padel Lobby — Todos os direitos reservados.
+    </footer>
+
+</body>
+
+</html>
