@@ -1,302 +1,267 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Prova Sobrevive ELITE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Prova Sobrevive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f3f4f6;
-            --card: #ffffff;
-            --primary: #2563eb;
-            --secondary: #7c3aed;
-            --success: #059669;
-            --danger: #dc2626;
-            --warning: #d97706;
-            --text: #111827;
-            --text-light: #6b7280;
-            --radius: 20px;
+            --bg: #0d1117;
+            --surface: #161b22;
+            --primary: #58a6ff;
+            --border: #30363d;
+            --text: #c9d1d9;
+            --success: #238636;
+            --danger: #f85149;
+            --warning: #d29922;
+            --radius: 12px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 100px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 90px; }
 
-        /* Estilo Profissional */
-        header { background: white; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 100; }
-        header h1 { font-size: 1.1rem; font-weight: 800; color: var(--primary); text-transform: uppercase; }
-        
-        .tab-content { display: none; padding: 15px; animation: slideUp 0.3s ease; }
-        .tab-content.active { display: block; }
+        /* Header & Nav */
+        header { 
+            padding: 20px; background: var(--surface); border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+        }
+        header h1 { font-size: 0.9rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; }
+
+        .sem-toggle { display: flex; background: var(--bg); padding: 3px; border-radius: 8px; border: 1px solid var(--border); }
+        .sem-toggle button { padding: 5px 12px; border: none; background: none; color: #8b949e; cursor: pointer; border-radius: 6px; font-size: 0.75rem; font-weight: 600; }
+        .sem-toggle button.active { background: var(--primary); color: white; }
+
+        .container { padding: 15px; animation: slideUp 0.4s ease; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Bottom Nav com 5 itens */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; padding: 10px 0; border-top: 1px solid #e5e7eb; z-index: 1000; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); }
-        .nav-item { flex: 1; border: none; background: none; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-light); font-size: 0.65rem; font-weight: 600; }
+        /* Cards */
+        .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 15px; overflow: hidden; }
+        .card-header { padding: 12px 15px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02); display: flex; justify-content: space-between; align-items: center; }
+        .card-body { padding: 15px; }
+
+        /* Inputs de Notas */
+        .grade-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 10px; }
+        .field { display: flex; flex-direction: column; gap: 4px; }
+        .field label { font-size: 0.65rem; color: #8b949e; font-weight: 600; text-transform: uppercase; }
+        .field input, select { background: var(--bg); border: 1px solid var(--border); color: white; padding: 8px; border-radius: 6px; font-size: 0.9rem; outline: none; }
+        .field input:focus { border-color: var(--primary); }
+
+        /* Média Final */
+        .result-bar { margin-top: 15px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .score { font-size: 1.4rem; font-weight: 800; }
+
+        /* Horário Table */
+        .sched-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+        .sched-table th { color: var(--primary); padding: 8px; border: 1px solid var(--border); background: var(--bg); }
+        .sched-table td { padding: 8px; border: 1px solid var(--border); text-align: center; }
+
+        /* Bottom Nav */
+        nav { position: fixed; bottom: 0; width: 100%; background: var(--surface); border-top: 1px solid var(--border); display: flex; padding: 10px 0; }
+        .nav-item { flex: 1; background: none; border: none; color: #8b949e; font-size: 0.65rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px; }
         .nav-item.active { color: var(--primary); }
-        .nav-item i { font-size: 1.2rem; }
+        .nav-item i { font-size: 1.2rem; font-style: normal; }
 
-        /* Cards Elite */
-        .card { background: white; border-radius: var(--radius); padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .card h3 { font-size: 1rem; margin-bottom: 10px; display: flex; justify-content: space-between; }
-        
-        /* Pomodoro Timer */
-        .timer-display { font-size: 4rem; font-weight: 800; text-align: center; margin: 20px 0; font-variant-numeric: tabular-nums; color: var(--secondary); }
-        .timer-controls { display: flex; gap: 10px; justify-content: center; }
-        .btn { border: none; padding: 12px 20px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-outline { background: #f3f4f6; color: var(--text); }
+        .tab { display: none; }
+        .tab.active { display: block; }
 
-        /* Tags de Dificuldade */
-        .diff-tag { font-size: 0.6rem; padding: 2px 8px; border-radius: 5px; text-transform: uppercase; }
-        .diff-1 { background: #dcfce7; color: #166534; } /* Fácil */
-        .diff-2 { background: #fef3c7; color: #92400e; } /* Médio */
-        .diff-3 { background: #fee2e2; color: #991b1b; } /* Difícil */
-
-        /* Inputs */
-        input, select, textarea { width: 100%; padding: 12px; border: 2px solid #f3f4f6; border-radius: 12px; margin-bottom: 10px; outline: none; font-size: 1rem; }
-        input:focus { border-color: var(--primary); }
-
-        .fab { position: fixed; bottom: 85px; right: 20px; width: 55px; height: 55px; background: var(--primary); color: white; border-radius: 50%; border: none; font-size: 24px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4); z-index: 99; }
-
-        /* Modal */
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: flex-end; }
-        .modal.active { display: flex; }
-        .modal-body { background: white; width: 100%; border-radius: 25px 25px 0 0; padding: 25px; }
-
-        /* Lista de Notas */
-        .grade-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f3f4f6; }
-        .grade-val { font-weight: 800; color: var(--primary); }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Survival Pro <span id="streak-header">🔥 0</span></h1>
-        <div id="active-timer-hint" style="font-size: 0.8rem; font-weight: 700; color: var(--secondary);"></div>
+        <h1>Prova Sobrevive</h1>
+        <div class="sem-toggle">
+            <button id="b1" class="active" onclick="setSem(1)">1º SEM</button>
+            <button id="b2" onclick="setSem(2)">2º SEM</button>
+        </div>
     </header>
 
-    <div id="tab-home" class="tab-content active">
-        <h2 style="margin-bottom: 15px;">Foco de Hoje</h2>
-        <div id="today-tasks"></div>
-    </div>
+    <div class="container">
+        <div id="grades" class="tab active">
+            <div class="card" style="border-color: var(--warning);">
+                <div class="card-body">
+                    <div class="field">
+                        <label>Bônus de Iniciação Científica (Global - Máx 1.0)</label>
+                        <input type="number" id="global-ic" step="0.1" value="0" oninput="updateAll()" max="1">
+                    </div>
+                </div>
+            </div>
+            <div id="subject-cards"></div>
+        </div>
 
-    <div id="tab-exams" class="tab-content">
-        <h2 style="margin-bottom: 15px;">Cronograma</h2>
-        <div id="exams-list"></div>
-    </div>
+        <div id="exams" class="tab">
+            <div class="card">
+                <div class="card-header"><strong>Agendar Avaliação</strong></div>
+                <div class="card-body">
+                    <div class="field" style="margin-bottom: 10px;">
+                        <label>Disciplina</label>
+                        <select id="exam-sub"></select>
+                    </div>
+                    <div class="field" style="margin-bottom: 10px;">
+                        <label>Tipo de Atividade</label>
+                        <select id="exam-type">
+                            <option>Prova P1</option>
+                            <option>Prova P2</option>
+                            <option>Trabalho</option>
+                            <option>Sequência Didática</option>
+                            <option>Simulado</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Data</label>
+                        <input type="date" id="exam-date">
+                    </div>
+                    <button class="btn-add" onclick="addExam()">Adicionar ao Cronograma</button>
+                </div>
+            </div>
+            <div id="exam-list"></div>
+        </div>
 
-    <div id="tab-focus" class="tab-content">
-        <div class="card" style="text-align: center;">
-            <h2>Modo Foco</h2>
-            <p id="timer-label" style="color: var(--text-light);">Concentração</p>
-            <div class="timer-display" id="timer-clock">25:00</div>
-            <div class="timer-controls">
-                <button class="btn btn-primary" onclick="toggleTimer()">Iniciar / Pausar</button>
-                <button class="btn btn-outline" onclick="resetTimer()">Reset</button>
+        <div id="schedule" class="tab">
+            <div class="card">
+                <div class="card-body" style="padding: 5px; overflow-x: auto;">
+                    <table class="sched-table">
+                        <thead>
+                            <tr><th>Horário</th><th>SEG</th><th>TER</th><th>QUA</th><th>QUI</th><th>SEX</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>07:35</td><td>História</td><td>Filosofia</td><td>Ed. Física</td><td>Inglês</td><td>Ciências</td></tr>
+                            <tr><td>08:25</td><td>Inglês</td><td>Matemática</td><td>Ens. Rel.</td><td>Ciências</td><td>Ciências</td></tr>
+                            <tr><td>09:15</td><td>Inglês</td><td>Matemática</td><td>Português</td><td>Geografia</td><td>Matemática</td></tr>
+                            <tr><td>10:25</td><td>Artes</td><td>Geografia</td><td>Artes</td><td>Matemática</td><td>Português</td></tr>
+                            <tr><td>11:15</td><td>Ed. Física</td><td>Português</td><td>História</td><td>Matemática</td><td>Português</td></tr>
+                            <tr><td>12:05</td><td>Ciências</td><td>-</td><td>Inglês</td><td>-</td><td>-</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="tab-grades" class="tab-content">
-        <h2 style="margin-bottom: 15px;">As Minhas Notas</h2>
-        <div class="card">
-            <h3>Média Geral: <span id="avg-grade">0.0</span></h3>
-            <div id="grades-list"></div>
-        </div>
-    </div>
-
-    <div id="tab-notes" class="tab-content">
-        <h2 style="margin-bottom: 15px;">Anotações Rápidas</h2>
-        <textarea id="global-notes" style="height: 300px;" placeholder="Escreve aqui fórmulas, datas importantes ou rascunhos..." oninput="saveGlobalNotes()"></textarea>
-    </div>
-
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('home', this)"><i>🏠</i>Início</button>
-        <button class="nav-item" onclick="switchTab('exams', this)"><i>📅</i>Provas</button>
-        <button class="nav-item" onclick="switchTab('focus', this)"><i>⏱</i>Foco</button>
-        <button class="nav-item" onclick="switchTab('grades', this)"><i>🎓</i>Notas</button>
-        <button class="nav-item" onclick="switchTab('notes', this)"><i>📝</i>Notas</button>
+    <nav>
+        <button class="nav-item active" onclick="tab('grades', this)"><i>🎓</i>Notas</button>
+        <button class="nav-item" onclick="tab('exams', this)"><i>📝</i>Provas</button>
+        <button class="nav-item" onclick="tab('schedule', this)"><i>📅</i>Horário</button>
     </nav>
 
-    <button class="fab" onclick="openModal()">+</button>
-
-    <div class="modal" id="modal">
-        <div class="modal-body">
-            <h2 style="margin-bottom: 15px;">Nova Prova/Trabalho</h2>
-            <input type="text" id="subject" placeholder="Ex: Matemática">
-            <input type="date" id="date">
-            <p style="font-size: 0.8rem; margin-bottom: 5px;">Tópicos (com dificuldade 1, 2 ou 3):</p>
-            <textarea id="topics" placeholder="Ex: Matrizes-2, Derivadas-3, Logaritmos-1" style="height: 80px;"></textarea>
-            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="addExam()">Gerar Plano Pro</button>
-            <button class="btn btn-outline" style="width: 100%; margin-top: 5px;" onclick="closeModal()">Sair</button>
-        </div>
-    </div>
-
     <script>
-        let exams = JSON.parse(localStorage.getItem('ps_elite_exams')) || [];
-        let stats = JSON.parse(localStorage.getItem('ps_elite_stats')) || { streak: 0, lastDate: null };
-        
-        // POMODORO STATE
-        let timerSeconds = 25 * 60;
-        let timerInterval = null;
-        let isRunning = false;
+        const subjects = ["História", "Inglês", "Ciências", "Artes", "Ed. Física", "Filosofia", "Matemática", "Geografia", "Português", "Ens. Religioso"];
+        let sem = 1;
+        let db = JSON.parse(localStorage.getItem('ac_v7_db')) || {};
+        let examsArr = JSON.parse(localStorage.getItem('ac_v7_exams')) || [];
 
-        function switchTab(tab, btn) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            document.getElementById('tab-' + tab).classList.add('active');
-            btn.classList.add('active');
+        function setSem(s) {
+            sem = s;
+            document.getElementById('b1').classList.toggle('active', s===1);
+            document.getElementById('b2').classList.toggle('active', s===2);
             render();
         }
 
-        function openModal() { document.getElementById('modal').classList.add('active'); }
-        function closeModal() { document.getElementById('modal').classList.remove('active'); }
-
-        function addExam() {
-            const sub = document.getElementById('subject').value;
-            const date = document.getElementById('date').value;
-            const raw = document.getElementById('topics').value;
-
-            if(!sub || !date) return;
-
-            const topics = raw.split(',').map(t => {
-                const parts = t.trim().split('-');
-                return { name: parts[0], difficulty: parts[1] || 1, done: false };
-            });
-
-            exams.push({ id: Date.now(), subject: sub, date, topics, grade: null });
-            save();
-            closeModal();
-        }
-
-        function toggleTopic(id, idx) {
-            const exam = exams.find(e => e.id === id);
-            exam.topics[idx].done = !exam.topics[idx].done;
-            
-            // Streak
-            const today = new Date().toDateString();
-            if(stats.lastDate !== today) {
-                stats.streak++;
-                stats.lastDate = today;
-            }
-            save();
-        }
-
-        function setGrade(id) {
-            const grade = prompt("Qual foi a nota desta prova?");
-            if(grade !== null) {
-                exams.find(e => e.id === id).grade = parseFloat(grade);
-                save();
-            }
-        }
-
-        function save() {
-            localStorage.setItem('ps_elite_exams', JSON.stringify(exams));
-            localStorage.setItem('ps_elite_stats', JSON.stringify(stats));
-            render();
+        function tab(id, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
+            if(id === 'exams') renderExams();
         }
 
         function render() {
-            const todayDiv = document.getElementById('today-tasks');
-            const examsDiv = document.getElementById('exams-list');
-            const gradesDiv = document.getElementById('grades-list');
-            const streakH = document.getElementById('streak-header');
-            
-            todayDiv.innerHTML = ''; examsDiv.innerHTML = ''; gradesDiv.innerHTML = '';
-            streakH.innerText = `🔥 ${stats.streak}`;
+            const container = document.getElementById('subject-cards');
+            const select = document.getElementById('exam-sub');
+            container.innerHTML = ''; select.innerHTML = '';
 
-            let allGrades = 0; let gradedCount = 0;
-
-            exams.sort((a,b) => new Date(a.date) - new Date(b.date));
-
-            exams.forEach(ex => {
-                const today = new Date(); today.setHours(0,0,0,0);
-                const target = new Date(ex.date); target.setMinutes(target.getMinutes() + target.getTimezoneOffset());
-                const diff = Math.ceil((target - today) / (86400000));
+            subjects.forEach(s => {
+                const id = s.replace(/\s/g, '');
+                const data = db[id] || {p1:0, p2:0, tr:0, sq:0, si:0};
                 
-                const done = ex.topics.filter(t => t.done).length;
-                const total = ex.topics.length;
-                const perDay = diff > 0 ? Math.ceil((total - done) / diff) : (total - done);
+                // Opções do select de provas
+                select.innerHTML += `<option>${s}</option>`;
 
-                // Aba Hoje
-                if(diff >= 0 && done < total) {
-                    const next = ex.topics.map((t, i) => ({...t, i})).filter(t => !t.done).slice(0, perDay);
-                    next.forEach(t => {
-                        todayDiv.innerHTML += `
-                            <div class="card" style="display:flex; align-items:center; gap:10px;">
-                                <input type="checkbox" style="width:25px; height:25px;" onchange="toggleTopic(${ex.id}, ${t.i})">
-                                <div>
-                                    <strong>${t.name}</strong> <span class="diff-tag diff-${t.difficulty}">${t.difficulty == 3 ? 'DIFÍCIL' : (t.difficulty == 2 ? 'MÉDIO' : 'FÁCIL')}</span>
-                                    <p style="font-size:0.7rem; color:var(--text-light)">${ex.subject.toUpperCase()}</p>
-                                </div>
-                            </div>
-                        `;
-                    });
-                }
+                const p2Label = sem === 1 ? "P2 (Máx 3.0)" : "P2 (Máx 3.0)";
+                const extraField = sem === 2 ? `
+                    <div class="field"><label>Simulado (1.0)</label>
+                    <input type="number" step="0.1" value="${data.si||0}" onchange="upd('${id}','si',this.value)"></div>` : '';
 
-                // Aba Provas
-                examsDiv.innerHTML += `
+                container.innerHTML += `
                     <div class="card">
-                        <h3>${ex.subject} <small>${diff}d restantes</small></h3>
-                        <div style="height:6px; background:#eee; border-radius:3px;">
-                            <div style="width:${(done/total)*100}%; height:100%; background:var(--primary); border-radius:3px;"></div>
+                        <div class="card-header"><strong>${s}</strong></div>
+                        <div class="card-body">
+                            <div class="grade-row">
+                                <div class="field"><label>${sem===1?'P1 (4.0)':'P1 (3.0)'}</label>
+                                <input type="number" step="0.1" value="${data.p1||0}" onchange="upd('${id}','p1',this.value)"></div>
+                                <div class="field"><label>${p2Label}</label>
+                                <input type="number" step="0.1" value="${data.p2||0}" onchange="upd('${id}','p2',this.value)"></div>
+                            </div>
+                            <div class="grade-row">
+                                <div class="field"><label>Trabalho (2.0)</label>
+                                <input type="number" step="0.1" value="${data.tr||0}" onchange="upd('${id}','tr',this.value)"></div>
+                                <div class="field"><label>Seq. Didática (1.0)</label>
+                                <input type="number" step="0.1" value="${data.sq||0}" onchange="upd('${id}','sq',this.value)"></div>
+                            </div>
+                            ${extraField}
+                            <div class="result-bar">
+                                <span style="font-size:0.7rem; font-weight:700">RESULTADO (CAPPED 10.0):</span>
+                                <span id="res-${id}" class="score">0.0</span>
+                            </div>
                         </div>
-                        <p style="font-size:0.7rem; margin-top:5px;">Concluído: ${done}/${total} tópicos</p>
                     </div>
                 `;
-
-                // Aba Grades
-                if(ex.grade !== null) {
-                    allGrades += ex.grade; gradedCount++;
-                    gradesDiv.innerHTML += `<div class="grade-item"><span>${ex.subject}</span><span class="grade-val">${ex.grade}</span></div>`;
-                } else if (done === total) {
-                    gradesDiv.innerHTML += `<div class="grade-item"><span>${ex.subject}</span><button onclick="setGrade(${ex.id})" class="btn-outline" style="padding:2px 10px; font-size:0.7rem; border-radius:5px;">Lançar Nota</button></div>`;
-                }
+                calc(id);
             });
-
-            document.getElementById('avg-grade').innerText = gradedCount ? (allGrades/gradedCount).toFixed(1) : '0.0';
         }
 
-        // TIMER LOGIC
-        function toggleTimer() {
-            if(isRunning) {
-                clearInterval(timerInterval);
-                isRunning = false;
-            } else {
-                isRunning = true;
-                timerInterval = setInterval(() => {
-                    timerSeconds--;
-                    updateTimerUI();
-                    if(timerSeconds <= 0) {
-                        clearInterval(timerInterval);
-                        alert("Tempo de foco terminado!");
-                        resetTimer();
-                    }
-                }, 1000);
-            }
+        function upd(id, f, v) {
+            if(!db[id]) db[id] = {};
+            db[id][f] = parseFloat(v) || 0;
+            localStorage.setItem('ac_v7_db', JSON.stringify(db));
+            calc(id);
         }
 
-        function resetTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            timerSeconds = 25 * 60;
-            updateTimerUI();
+        function updateAll() { subjects.forEach(s => calc(s.replace(/\s/g, ''))); }
+
+        function calc(id) {
+            const d = db[id] || {};
+            const ic = parseFloat(document.getElementById('global-ic').value) || 0;
+            let sum = (d.p1||0) + (d.p2||0) + (d.tr||0) + (d.sq||0) + (d.si||0) + ic;
+            
+            const el = document.getElementById(`res-${id}`);
+            el.innerText = Math.min(sum, 10).toFixed(1);
+            el.style.color = sum >= 6 ? 'var(--success)' : 'var(--danger)';
         }
 
-        function updateTimerUI() {
-            const m = Math.floor(timerSeconds / 60);
-            const s = timerSeconds % 60;
-            const timeStr = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-            document.getElementById('timer-clock').innerText = timeStr;
-            document.getElementById('active-timer-hint').innerText = isRunning ? '⏱ EM FOCO: ' + timeStr : '';
+        // SISTEMA DE PROVAS
+        function addExam() {
+            const sub = document.getElementById('exam-sub').value;
+            const type = document.getElementById('exam-type').value;
+            const date = document.getElementById('exam-date').value;
+            if(!date) return alert("Escolha uma data!");
+
+            examsArr.push({ sub, type, date });
+            examsArr.sort((a,b) => new Date(a.date) - new Date(b.date));
+            localStorage.setItem('ac_v7_exams', JSON.stringify(examsArr));
+            renderExams();
         }
 
-        // GLOBAL NOTES
-        function saveGlobalNotes() {
-            localStorage.setItem('ps_elite_notes', document.getElementById('global-notes').value);
+        function renderExams() {
+            const list = document.getElementById('exam-list');
+            list.innerHTML = '<h2 style="font-size:0.8rem; margin: 15px 0 10px; color:var(--primary)">PRÓXIMAS ATIVIDADES</h2>';
+            examsArr.forEach((e, i) => {
+                const d = new Date(e.date).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+                list.innerHTML += `
+                    <div class="card" style="padding:12px; display:flex; justify-content:space-between; align-items:center">
+                        <div>
+                            <div style="font-weight:700; font-size:0.9rem">${e.sub}</div>
+                            <div style="font-size:0.7rem; color:#8b949e">${e.type} • ${d}</div>
+                        </div>
+                        <button onclick="delExam(${i})" style="background:none; border:none; color:var(--danger); font-weight:bold">X</button>
+                    </div>
+                `;
+            });
         }
-        document.getElementById('global-notes').value = localStorage.getItem('ps_elite_notes') || '';
+
+        function delExam(i) { examsArr.splice(i, 1); localStorage.setItem('ac_v7_exams', JSON.stringify(examsArr)); renderExams(); }
 
         render();
     </script>
