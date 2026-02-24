@@ -1,160 +1,335 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sobre Nós — Padel Lobby</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Prova Sobrevive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        /* Reset básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #2563eb;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --warning: #f59e0b;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--light); color: var(--dark); padding-bottom: 80px; }
 
+        /* Header App com Streak */
         header {
-            background: #c8102e;
-            color: #fff;
-            padding: 60px 20px;
-            text-align: center;
+            background: var(--white);
+            padding: 16px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        header h1 {
-            font-size: 3rem;
-            letter-spacing: 1px;
-        }
+        header h1 { font-size: 1.2rem; color: var(--primary); font-weight: 800; }
+        .streak { font-weight: 800; color: var(--warning); display: flex; align-items: center; gap: 4px; font-size: 0.9rem;}
+        .streak.inactive { color: #cbd5e1; filter: grayscale(1); }
 
-        main {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+        .container { padding: 20px; }
+        .section-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 12px; margin-top: 24px; color: var(--dark); }
 
-        .intro {
-            font-size: 1.25rem;
-            text-align: center;
-            margin-bottom: 50px;
-            color: #555;
-        }
-
-        .highlight {
-            color: #fbbf24;
-            font-weight: bold;
-        }
-
-        .section-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-        }
-
-        section {
-            background: #fff;
-            padding: 30px 25px;
+        .task-card {
+            background: var(--white);
+            padding: 16px;
             border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            border-left: 4px solid var(--primary);
+            transition: 0.2s;
+        }
+        
+        .task-card.completed { opacity: 0.6; text-decoration: line-through; border-left-color: var(--success); }
+        .task-info h4 { font-size: 1rem; margin-bottom: 4px; }
+        .task-info p { font-size: 0.8rem; color: #64748b; }
+
+        /* CORREÇÃO DO CSS AQUI */
+        input[type="checkbox"] { width: 24px; height: 24px; cursor: pointer; accent-color: var(--success); }
+
+        .progress-card {
+            background: var(--white);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
-        section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 12px; align-items: flex-start;}
+        .progress-header h3 { font-size: 1rem; }
+        .badge { background: #e2e8f0; font-size: 0.75rem; padding: 4px 8px; border-radius: 6px; font-weight: 800; text-align: right;}
+        .badge.danger { background: #fee2e2; color: var(--danger); animation: pulse 2s infinite; }
+        .badge.success { background: #dcfce7; color: var(--success); }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
-        section h2 {
-            color: #c8102e;
-            margin-bottom: 15px;
-            font-size: 1.8rem;
-            border-bottom: 3px solid #fbbf24;
-            display: inline-block;
-            padding-bottom: 5px;
-        }
+        .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
+        .progress-fill { height: 100%; background: var(--primary); transition: width 0.3s; }
+        .progress-text { font-size: 0.8rem; color: #64748b; }
 
-        section p,
-        section ul {
-            font-size: 1rem;
-            color: #555;
-        }
+        .fab { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; background: var(--primary); color: white; border-radius: 28px; display: flex; justify-content: center; align-items: center; font-size: 28px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); border: none; cursor: pointer; z-index: 100; }
 
-        ul {
-            padding-left: 20px;
-            list-style-type: disc;
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: flex-end; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--white); width: 100%; border-radius: 24px 24px 0 0; padding: 24px; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            background: #222;
-            color: #ddd;
-            font-size: 0.95rem;
-        }
-
-        /* Responsivo para tablets e celulares */
-        @media (max-width: 900px) {
-            .section-container {
-                grid-template-columns: 1fr;
-            }
-
-            header h1 {
-                font-size: 2.2rem;
-            }
-
-            .intro {
-                font-size: 1.1rem;
-            }
-
-            section h2 {
-                font-size: 1.5rem;
-            }
-        }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; }
+        .form-group textarea { resize: none; height: 80px; }
+        .btn-full { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        .btn-cancel { width: 100%; padding: 14px; background: transparent; color: #64748b; border: none; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        .empty-state { text-align: center; padding: 40px 20px; color: #64748b; }
     </style>
 </head>
-
 <body>
 
     <header>
-        <h1>Sobre o Padel Lobby</h1>
+        <h1>📚 Prova Sobrevive</h1>
+        <div id="streak-display" class="streak inactive">🔥 0</div>
     </header>
 
-    <main>
-        <p class="intro">
-            O <span class="highlight">Padel Lobby</span> é um espaço dedicado à prática e ao desenvolvimento do padel.
-            Nosso objetivo é proporcionar um ambiente moderno, confortável e acolhedor para atletas e entusiastas do
-            esporte.
-        </p>
+    <div class="container">
+        <h2 class="section-title">📌 Para estudar HOJE</h2>
+        <div id="today-tasks"></div>
 
-        <div class="section-container">
-            <section>
-                <h2>Nossa Missão</h2>
-                <p>
-                    Promover o padel como uma prática esportiva acessível e prazerosa, incentivando a socialização, a
-                    saúde e o bem-estar de todos os frequentadores.
-                </p>
-            </section>
+        <h2 class="section-title">📊 Seu Progresso</h2>
+        <div id="progress-list"></div>
+    </div>
 
-            <section>
-                <h2>Serviços</h2>
-                <ul>
-                    <li>Quadras cobertas e de alta qualidade.</li>
-                    <li>Estrutura completa com vestiários, bar e áreas de convivência.</li>
-                    <li>Serviços complementares como Wi-Fi e espaço para eventos.</li>
-                </ul>
-            </section>
+    <button class="fab" onclick="openModal()">+</button>
+
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 16px;">Novo Estudo</h2>
+            <div class="form-group"><label>O que é?</label><select id="itemType"><option value="Prova">Prova</option><option value="Trabalho">Trabalho</option></select></div>
+            <div class="form-group"><label>Matéria</label><input type="text" id="subject" placeholder="Ex: Matemática..." required></div>
+            <div class="form-group"><label>Data de Entrega/Prova</label><input type="date" id="deadline" required></div>
+            <div class="form-group"><label>Tópicos (separados por vírgula)</label><textarea id="topics" placeholder="Ex: Frações, Equações..." required></textarea></div>
+            <button class="btn-full" onclick="saveItem()">Criar Plano Automático</button>
+            <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
         </div>
-    </main>
+    </div>
 
-    <footer>
-        © 2026 Padel Lobby — Todos os direitos reservados.
-    </footer>
+    <script>
+        let items = JSON.parse(localStorage.getItem('provaSobrevive_data')) || [];
+        let userStats = JSON.parse(localStorage.getItem('provaSobrevive_stats')) || { streak: 0, lastStudyDate: null };
 
+        function saveToStorage() {
+            localStorage.setItem('provaSobrevive_data', JSON.stringify(items));
+            localStorage.setItem('provaSobrevive_stats', JSON.stringify(userStats));
+            renderApp();
+        }
+
+        function checkStreak() {
+            const today = new Date().toDateString();
+            if (!userStats.lastStudyDate) return;
+            
+            let yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            // Se o último dia de estudo não foi hoje nem ontem, zera o streak
+            if (userStats.lastStudyDate !== today && userStats.lastStudyDate !== yesterday.toDateString()) {
+                userStats.streak = 0;
+            }
+        }
+
+        function updateStreakOnCompletion() {
+            const today = new Date().toDateString();
+            let yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (userStats.lastStudyDate === yesterday.toDateString()) {
+                userStats.streak++; // Estudou ontem e hoje
+            } else if (userStats.lastStudyDate !== today) {
+                userStats.streak = 1; // Recomeçou hoje
+            }
+            
+            userStats.lastStudyDate = today;
+        }
+
+        function calculateStats(item) {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const targetDate = new Date(item.deadline);
+            // Corrige fuso horário para garantir o cálculo exato de dias
+            targetDate.setMinutes(targetDate.getMinutes() + targetDate.getTimezoneOffset());
+            targetDate.setHours(0,0,0,0);
+            
+            const diffTime = targetDate - today;
+            let daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            const totalTopics = item.topics.length;
+            const completedTopics = item.topics.filter(t => t.done).length;
+            const pendingTopics = totalTopics - completedTopics;
+            
+            let topicsPerDay = 0;
+            if (daysRemaining > 0) {
+                topicsPerDay = Math.ceil(pendingTopics / daysRemaining);
+            } else {
+                topicsPerDay = pendingTopics; // Se passou do dia, tem que fazer tudo
+            }
+
+            const progress = totalTopics === 0 ? 0 : Math.round((completedTopics / totalTopics) * 100);
+
+            return { daysRemaining, pendingTopics, topicsPerDay, progress };
+        }
+
+        function renderApp() {
+            checkStreak(); // Valida se perdeu a ofensiva antes de renderizar
+            
+            const streakDisplay = document.getElementById('streak-display');
+            const todayStr = new Date().toDateString();
+            
+            streakDisplay.innerText = `🔥 ${userStats.streak}`;
+            if (userStats.streak > 0 && userStats.lastStudyDate === todayStr) {
+                streakDisplay.classList.remove('inactive');
+            } else {
+                streakDisplay.classList.add('inactive');
+            }
+
+            const todayTasksContainer = document.getElementById('today-tasks');
+            const progressContainer = document.getElementById('progress-list');
+            todayTasksContainer.innerHTML = '';
+            progressContainer.innerHTML = '';
+
+            if (items.length === 0) {
+                todayTasksContainer.innerHTML = '<div class="empty-state">Tudo tranquilo! Adicione provas ou trabalhos no botão +.</div>';
+                return;
+            }
+
+            // ORDENAÇÃO: Mais urgente primeiro
+            items.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+
+            let todayTaskCount = 0;
+            let pendingTaskCount = 0;
+
+            items.forEach((item, itemIndex) => {
+                const stats = calculateStats(item);
+
+                // Progresso e Badges
+                let badgeClass = 'badge';
+                let badgeText = `${stats.daysRemaining} dias restantes`;
+                
+                if (stats.progress === 100) {
+                    badgeClass += ' success';
+                    badgeText = `Concluído! 🎉`;
+                } else if (stats.daysRemaining === 1) {
+                    badgeClass += ' danger';
+                    badgeText = `🚨 AMANHÃ É A PROVA`;
+                } else if (stats.daysRemaining === 0) {
+                    badgeClass += ' danger';
+                    badgeText = `🔥 A PROVA É HOJE`;
+                } else if (stats.daysRemaining < 0) {
+                    badgeClass = 'badge';
+                    badgeText = `Encerrado`;
+                } else if (stats.daysRemaining <= 3 && stats.progress < 70) {
+                    badgeClass += ' danger';
+                    badgeText = `Atrasado! Corra`;
+                }
+
+                progressContainer.innerHTML += `
+                    <div class="progress-card">
+                        <div class="progress-header">
+                            <h3>${item.type}: ${item.subject}</h3>
+                            <span class="${badgeClass}">${badgeText}</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${stats.progress}%"></div>
+                        </div>
+                        <div class="progress-text">${stats.progress}% - Faltam ${stats.pendingTopics} tópicos</div>
+                    </div>
+                `;
+
+                // Tarefas de Hoje
+                if (stats.daysRemaining >= 0 && stats.progress < 100) {
+                    const pendingTopicsList = item.topics.map((t, index) => ({...t, index})).filter(t => !t.done);
+                    const todaysTarget = pendingTopicsList.slice(0, stats.topicsPerDay);
+                    
+                    pendingTaskCount += todaysTarget.length;
+
+                    todaysTarget.forEach(topic => {
+                        todayTaskCount++;
+                        todayTasksContainer.innerHTML += `
+                            <div class="task-card">
+                                <input type="checkbox" 
+                                    onchange="toggleTopic('${item.id}', ${topic.index})" 
+                                    ${topic.done ? 'checked' : ''}>
+                                <div class="task-info">
+                                    <h4>${topic.name}</h4>
+                                    <p>${item.subject} (${item.type})</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+            });
+
+            if (todayTaskCount === 0 && items.length > 0) {
+                todayTasksContainer.innerHTML = '<div class="empty-state">Meta de hoje batida! 🎉 Você está em dia com os estudos.</div>';
+            }
+        }
+
+        function toggleTopic(itemId, topicIndex) {
+            // Busca o item pelo ID para não dar erro com o Sort
+            const item = items.find(i => i.id == itemId);
+            if(item) {
+                item.topics[topicIndex].done = !item.topics[topicIndex].done;
+                
+                // Se marcou como concluído, atualiza a ofensiva
+                if(item.topics[topicIndex].done) {
+                    updateStreakOnCompletion();
+                }
+                
+                saveToStorage();
+            }
+        }
+
+        function openModal() { document.getElementById('addModal').classList.add('active'); }
+        function closeModal() { document.getElementById('addModal').classList.remove('active'); }
+
+        function saveItem() {
+            const type = document.getElementById('itemType').value;
+            const subject = document.getElementById('subject').value;
+            const deadline = document.getElementById('deadline').value;
+            const topicsRaw = document.getElementById('topics').value;
+
+            if (!subject || !deadline || !topicsRaw) {
+                alert("Preencha todos os campos!");
+                return;
+            }
+
+            const topicsArray = topicsRaw.split(',').map(t => ({
+                name: t.trim(), done: false
+            })).filter(t => t.name !== "");
+
+            items.push({ id: Date.now(), type, subject, deadline, topics: topicsArray });
+            saveToStorage();
+            closeModal();
+            
+            document.getElementById('subject').value = '';
+            document.getElementById('deadline').value = '';
+            document.getElementById('topics').value = '';
+        }
+
+        renderApp();
+    </script>
 </body>
-
 </html>
